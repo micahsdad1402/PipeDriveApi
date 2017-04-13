@@ -57,6 +57,7 @@ namespace PipeDriveApi
                 request.SetQueryParameter("api_token", _ApiToken);
 
                 Debug.WriteLine($"{DateTime.UtcNow:s} {request.Method} {request.Resource}");
+
                 var response = await _Client.ExecuteTaskAsync<TResponse>(request);
                 if (response.ResponseStatus == ResponseStatus.Completed)
                 {
@@ -69,6 +70,19 @@ namespace PipeDriveApi
                 {
                     throw response.ErrorException;
                 }
+            });
+        }
+
+        public async Task<string> ExecuteRequestWithoutSerialize  (IRestRequest request)
+        {
+            return await _TimeContraint.Perform(async () =>
+            {
+                request.SetQueryParameter("api_token", _ApiToken);
+                var response = await _Client.ExecuteTaskAsync(request);
+                if (response.ResponseStatus == ResponseStatus.Completed)
+                    return response.Content;
+                else
+                    throw response.ErrorException;
             });
         }
     }

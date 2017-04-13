@@ -9,6 +9,7 @@ namespace PipeDriveApi
         Task ExecuteRequestAsync(IRestRequest request);
         Task<TResponse> ExecuteRequestWithCustomResponseAsync<TResponse, T>(IRestRequest request)
             where TResponse : PipeDriveResponse<T>, new();
+        Task <string> ExecuteRequestWithoutSerialize(IRestRequest request);
 
     }
 }

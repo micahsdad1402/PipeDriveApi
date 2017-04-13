@@ -52,4 +52,14 @@ namespace PipeDriveApi
         public string OwnerName { get; set; }
         public string CcEmail { get; set; }
     }
+    public class PersonFound : BaseEntity
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public int OrgId { get; set; }
+        public string Org_Name { get; set; }
+        public string VisibleTo { get; set; }
+    }
 }

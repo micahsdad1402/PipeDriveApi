@@ -31,6 +31,19 @@ namespace PipeDriveApi.EntityServices
             var response = await _client.ExecuteRequestWithCustomResponseAsync<PaginatedPipeDriveResponse<TEntity>, List<TEntity>>(request);
             return new ListResult<TEntity>(response.Data, response.AdditionalData.Pagination);
         }
+        public virtual async Task<ListResult<TEntity>> FindAsync(string SearchTerm, int start = 0, int limit = 100, Sort sort = null)
+        {
+            var request = new RestRequest(_Resource, Method.GET);
+            request.AddParameter("term", SearchTerm);
+            return await GetAsync(request, start, limit, sort);
+        }
+
+        public virtual async Task<ListResult<TEntity>> ListAinB(int Id, int start = 0, int limit = 100, Sort sort = null)
+        {
+            var request = new RestRequest(_Resource, Method.GET);
+            request.AddParameter("Id", Id.ToString(),ParameterType.UrlSegment);
+            return await GetAsync(request, start, limit, sort);
+        }
 
         public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync(Sort sort = null)
         {
