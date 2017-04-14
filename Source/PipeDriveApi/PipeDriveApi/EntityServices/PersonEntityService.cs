@@ -16,12 +16,22 @@ namespace PipeDriveApi.EntityServices
         }
         public async Task<Person> GetByID(int PersonID)
         {
-            var request = new RestRequest("persons/{ID}", Method.GET);
+            var request = new RestRequest("persons/{Id}", Method.GET);
 
-            request.AddParameter("ID", PersonID.ToString(), ParameterType.UrlSegment);
+            request.AddParameter("Id", PersonID.ToString(), ParameterType.UrlSegment);
 
             var response = await _client.ExecuteRequestAsync<Person>(request);
             return response;
+        }
+        public async Task<JObject> GetJsonByID(int PersonId)
+        {
+            var request = new RestRequest("persons/{Id}", Method.GET);
+
+            request.AddParameter("Id", PersonId.ToString(), ParameterType.UrlSegment);
+
+            string response = await _client.ExecuteRequestWithoutSerialize(request);
+            JObject PersonData = JObject.Parse(response);
+            return PersonData;
         }
     }
     public class PersonFoundEntityService<TPersonFound> : PagingEntityService<TPersonFound>
@@ -52,22 +62,5 @@ namespace PipeDriveApi.EntityServices
 
         }
 
-    }
-    public class PersonAddressEntityService<TAddressDetails> : PagingEntityService<TAddressDetails>
-        where TAddressDetails : AddressDetails
-    {
-        public PersonAddressEntityService(IPipeDriveClient client) : base(client, "persons/{Id}")
-        {
-        }
-        public async Task<JObject> GetAddresses(int PersonId)
-        {
-            var request = new RestRequest("persons/{Id}", Method.GET);
-
-            request.AddParameter("Id", PersonId.ToString(), ParameterType.UrlSegment);
-
-            string response = await _client.ExecuteRequestWithoutSerialize(request);
-            JObject PersonData = JObject.Parse(response);
-            return PersonData;
-        }
     }
 }
